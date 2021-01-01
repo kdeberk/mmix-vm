@@ -1,0 +1,26 @@
+;; Find the maximum of the numbers X[1],...,X[n]
+;; Parameters:
+;;   $0 ← n
+;;   x0 ← address of X[0]
+;; Result:
+;;   $0 ← index of max value
+;;   $1 ← max value
+
+
+j         IS        $0        ;; Index of max value
+m         IS        $1        ;; Max value
+kk        IS        $2        ;; 8k
+xk        IS        $3        ;; X[k]
+t         IS        $255      ;; Temp value
+          LOC       #100
+Maximum   SL        kk,$0,3   ;; k ← n
+          LDO       m,x0,kk   ;; m ← X[k]
+          JMP       DecrK
+Loop      LDO       xk,x0,kk  ;; xk ← X[k]
+          CMP       t,xk,m
+          PBNP      t,DecrK   ;; if X[k] <= m
+ChangeM   SET       m,xk      ;; m ← X[k]
+          SR        j,kk,3    ;; j ← k
+Decrk     SUB       kk,kk,8   ;; k ← k - 1
+          PBP       kk,Loop   ;; if 0 < k
+          POP       2,0
